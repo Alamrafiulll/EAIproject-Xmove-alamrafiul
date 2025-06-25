@@ -254,7 +254,6 @@ nav button:hover, nav button.active {
     letter-spacing: 1px;
 }
 
-/* Responsive design for mobile */
 @media (max-width: 900px) {
     .container { flex-direction: column; }
     .brand-sidebar { flex-direction: row; height: auto; min-width: 0; }

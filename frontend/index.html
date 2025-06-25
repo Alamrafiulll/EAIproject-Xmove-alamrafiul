@@ -7,16 +7,14 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-      /* Optionally, hide scrollbars for modal fullscreen */
       body.auth-open { overflow: hidden; }
     </style>
 </head>
 <body>
-<!-- Background Image for Auth (hide after login) -->
+
 <img id="bg-img" src="http://127.0.0.1:5000/static/background.jpg" alt="Background"
      style="display:block;position:fixed;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:0;">
 
-<!-- ========== LOGIN/SIGNUP MODAL ========== -->
 <div id="auth-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;align-items:center;justify-content:center;z-index:30;background:rgba(0,0,0,0.35);">
   <div style="background:rgba(222,222,222,0.78);padding:38px 36px 30px 36px;border-radius:20px;min-width:350px;box-shadow:0 3px 16px #111;position:relative;z-index:40;backdrop-filter: blur(2px);">
     <h2 id="auth-title" style="text-align:center;font-family:'Press Start 2P',Arial,sans-serif;">Login</h2>
@@ -32,7 +30,6 @@
   </div>
 </div>
 
-<!-- ========== MAIN HEADER (hidden until login) ========== -->
 <header id="main-header" style="display:none;">
     <nav>
         <span class="logo">XMove</span>
@@ -44,7 +41,6 @@
     </nav>
 </header>
 
-<!-- ========== MAIN APP UI ========== -->
 <div id="main-ui" style="display:none;">
   <div class="container">
       <aside class="brand-sidebar">
@@ -72,7 +68,7 @@
   </div>
 </div>
 
-<!-- ========== SCRIPTS ========== -->
+
 <script src="js/shop-single.js"></script>
 </body>
 </html>

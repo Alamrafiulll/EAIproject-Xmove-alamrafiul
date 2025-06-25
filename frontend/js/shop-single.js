@@ -1,7 +1,6 @@
 const API_URL = "http://127.0.0.1:5000/api";
 let selectedBrand = "All";
 
-// ================== AUTH LOGIC ==================
 let isSignup = false;
 function showAuth(isSignUpMode = false) {
     document.getElementById('auth-modal').style.display = 'flex';
@@ -38,7 +37,6 @@ document.getElementById('auth-action').onclick = function() {
         if (data.error) {
             document.getElementById('auth-error').innerText = data.error;
         } else {
-            // Login/Signup successful
             document.getElementById('auth-modal').style.display = 'none';
             document.getElementById('bg-img').style.display = 'none';
             document.getElementById('main-ui').style.display = '';
@@ -58,8 +56,6 @@ function logout() {
     document.getElementById('bg-img').style.display = 'none';
     showAuth(false);
 }
-
-// ================== SHOP LOGIC ==================
 
 function showSection(section) {
     document.querySelectorAll('.shop-section').forEach(sec => sec.style.display = 'none');
@@ -121,7 +117,6 @@ function loadProducts(gender) {
         });
 }
 
-// --- Cart and Orders logic ---
 function renderCart() {
     fetch(API_URL + '/cart')
         .then(res => res.json())
@@ -188,7 +183,6 @@ function renderOrders() {
         });
 }
 
-// -- CANCEL ORDER FUNCTION --
 function cancelOrder(orderId) {
     if (!confirm("Are you sure you want to cancel this order?")) return;
     fetch(API_URL + '/order', {
@@ -221,5 +215,4 @@ function orderNow(id) {
     setTimeout(() => showSection('cart'), 300);
 }
 
-// --- Initialize on page load ---
 showAuth(false);

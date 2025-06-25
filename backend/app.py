@@ -48,7 +48,6 @@ def login():
     else:
         return jsonify({"error": "Invalid credentials"}), 401
 
-# Product database
 products = [
     # Men - Nike
     {"id": 1, "name": "Nike Air Max", "gender": "Men", "brand": "Nike", "price": 450, "img": "/static/airmax.jpg"},
@@ -85,7 +84,7 @@ orders = []
 def serve_static(filename):
     return send_from_directory('static', filename)
 
-# Get products 
+
 @app.route('/api/products', methods=['GET'])
 def get_products():
     gender = request.args.get('gender')
@@ -97,13 +96,13 @@ def get_products():
         filtered = [p for p in filtered if p['brand'].lower() == brand.lower()]
     return jsonify(filtered)
 
-#  Brands Show 
+
 @app.route('/api/brands', methods=['GET'])
 def get_brands():
     brands = sorted(list(set([p["brand"] for p in products])))
     return jsonify(["All"] + brands)
 
-# Cart operations
+
 @app.route('/api/cart', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def handle_cart():
     global cart
@@ -129,7 +128,7 @@ def handle_cart():
         cart[:] = [c for c in cart if c['id'] != data['id']]
         return jsonify(cart)
 
-# Place order
+
 @app.route('/api/order', methods=['POST'])
 def place_order():
     global orders, cart
@@ -139,11 +138,11 @@ def place_order():
     cart.clear()
     return jsonify({"message": "Order placed successfully!"})
 
-# Get orders
+
 @app.route('/api/orders', methods=['GET'])
 def get_orders():
     return jsonify(orders)
-#Delete orders
+
 @app.route('/api/order', methods=['DELETE'])
 def cancel_order():
     global orders

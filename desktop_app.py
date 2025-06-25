@@ -17,7 +17,7 @@ class ShoeShopApp(tk.Tk):
         self.selected_gender = "Men"
         self.selected_brand = "All"
         self.section = "shop"
-        self.bg_label = None  # Track the background image label
+        self.bg_label = None  
 
         font_path = os.path.join(os.path.dirname(__file__), "fonts", "PressStart2P-Regular.ttf")
         if os.path.exists(font_path):
@@ -37,14 +37,12 @@ class ShoeShopApp(tk.Tk):
         self.init_ui()
         self.show_login()
 
-    # ========== AUTH UI ==========
 
     def show_login(self):
         for widget in self.winfo_children():
             widget.pack_forget()
             widget.place_forget()
 
-        # Set background image (track bg_label so we can hide it later)
         bg_path = os.path.join(os.path.dirname(__file__), "background.jpg")
         if os.path.exists(bg_path):
             bg_img = Image.open(bg_path).resize((1050, 670))
@@ -59,7 +57,7 @@ class ShoeShopApp(tk.Tk):
             self.configure(bg="#242426")
             self.bg_label = None
 
-        # Center login panel
+     
         panel_width, panel_height = 520, 410
         x0, y0 = (1050 - panel_width) // 2, (670 - panel_height) // 2
 
@@ -67,7 +65,6 @@ class ShoeShopApp(tk.Tk):
         self.login_canvas.place(x=x0, y=y0)
         radius = 40
         color = "#dedede"
-        # Draw corners
         self.login_canvas.create_arc((0, 0, radius*2, radius*2), start=90, extent=90, fill=color, outline=color)
         self.login_canvas.create_arc((panel_width-radius*2, 0, panel_width, radius*2), start=0, extent=90, fill=color, outline=color)
         self.login_canvas.create_arc((0, panel_height-radius*2, radius*2, panel_height), start=180, extent=90, fill=color, outline=color)
@@ -78,39 +75,32 @@ class ShoeShopApp(tk.Tk):
         frm = tk.Frame(self.login_canvas, bg=color)
         tk.Label(frm, text="LOGIN", font=(self.pixel_font, 28, "bold"), bg=color).pack(pady=(20, 18))
 
-        # Email Entry
         email_var = tk.StringVar()
         self.email_entry = tk.Entry(frm, width=34, font=(self.pixel_font, 13), bg="#ececec", fg="#222", textvariable=email_var, borderwidth=0, relief=tk.FLAT)
         self.email_entry.insert(0, "EMAIL ADDRESS")
         self.email_entry.pack(pady=(0, 14), ipady=7)
 
-        # Password Entry
         password_var = tk.StringVar()
         self.password_entry = tk.Entry(frm, width=34, font=(self.pixel_font, 13), bg="#ececec", fg="#222", textvariable=password_var, borderwidth=0, relief=tk.FLAT)
         self.password_entry.insert(0, "PASSWORD")
         self.password_entry.pack(pady=(0, 10), ipady=7)
 
-        # Checkbox only
         cb_var = tk.IntVar()
         cb_frame = tk.Frame(frm, bg=color)
         cb_frame.pack(fill="x", padx=16)
         cb = tk.Checkbutton(cb_frame, text="KEEP ME LOGGED IN", variable=cb_var, bg=color, font=(self.pixel_font, 10), borderwidth=0, highlightthickness=0)
         cb.pack(side=tk.LEFT, anchor="w")
 
-        # Divider
         tk.Frame(frm, bg=color).pack(pady=(6,0))
 
-        # Login button
         login_btn = tk.Button(frm, text="LOGIN", font=(self.pixel_font, 14, "bold"), bg="black", fg="white", width=20, height=1,
                               command=lambda: self.do_login_with_entries(self.email_entry, self.password_entry))
         login_btn.pack(pady=(20, 8))
 
-        # Sign Up button
         signup_btn = tk.Button(frm, text="Sign Up", font=(self.pixel_font, 12, "bold"), bg="#444", fg="white", width=20, height=1,
                                command=self.show_signup)
         signup_btn.pack(pady=(0, 10))
 
-        # Policy text
         tk.Label(frm, text="By logging in, you agree to XMove's Privacy Policy and Terms of use",
                  bg=color, fg="#222", font=(self.pixel_font, 9), wraplength=420, justify="center").pack(pady=(12,2))
 
@@ -119,7 +109,6 @@ class ShoeShopApp(tk.Tk):
 
         self.login_canvas.create_window(panel_width // 2, panel_height // 2, window=frm)
 
-        # Clear placeholder text on click
         def clear_email(e):
             if self.email_entry.get() == "EMAIL ADDRESS":
                 self.email_entry.delete(0, tk.END)
@@ -141,7 +130,7 @@ class ShoeShopApp(tk.Tk):
             if resp.status_code == 200:
                 self.login_status.config(text="Login successful!", fg="green")
                 self.login_canvas.place_forget()
-                # Hide background image after login
+               
                 if hasattr(self, "bg_label") and self.bg_label:
                     self.bg_label.place_forget()
                 self.sidebar.pack(side=tk.LEFT, fill=tk.Y)
@@ -160,13 +149,13 @@ class ShoeShopApp(tk.Tk):
         self.main_frame.pack_forget()
         self.show_login()
 
-    # Sign Up Page
+
     def show_signup(self):
         self.login_canvas.place_forget()
-        # Show background image if hidden
+     
         if hasattr(self, "bg_label") and self.bg_label:
             self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
-        # Center sign up panel
+     
         panel_width, panel_height = 520, 410
         x0, y0 = (1050 - panel_width) // 2, (670 - panel_height) // 2
 
@@ -174,7 +163,7 @@ class ShoeShopApp(tk.Tk):
         self.signup_canvas.place(x=x0, y=y0)
         radius = 40
         color = "#dedede"
-        # Draw corners
+      
         self.signup_canvas.create_arc((0, 0, radius*2, radius*2), start=90, extent=90, fill=color, outline=color)
         self.signup_canvas.create_arc((panel_width-radius*2, 0, panel_width, radius*2), start=0, extent=90, fill=color, outline=color)
         self.signup_canvas.create_arc((0, panel_height-radius*2, radius*2, panel_height), start=180, extent=90, fill=color, outline=color)
@@ -185,7 +174,7 @@ class ShoeShopApp(tk.Tk):
         frm = tk.Frame(self.signup_canvas, bg=color)
         tk.Label(frm, text="SIGN UP", font=(self.pixel_font, 28, "bold"), bg=color).pack(pady=(20, 18))
 
-        # Email and password entries
+
         self.signup_email_entry = tk.Entry(frm, width=34, font=(self.pixel_font, 13), bg="#ececec", fg="#222", borderwidth=0, relief=tk.FLAT)
         self.signup_email_entry.insert(0, "EMAIL ADDRESS")
         self.signup_email_entry.pack(pady=(0, 14), ipady=7)
@@ -193,12 +182,12 @@ class ShoeShopApp(tk.Tk):
         self.signup_password_entry.insert(0, "PASSWORD")
         self.signup_password_entry.pack(pady=(0, 10), ipady=7)
 
-        # Sign Up button
+  
         signup_btn = tk.Button(frm, text="Sign Up", font=(self.pixel_font, 14, "bold"), bg="black", fg="white", width=20, height=1,
                                command=self.do_signup)
         signup_btn.pack(pady=(20, 10))
 
-        # Back to Login button
+      
         login_btn = tk.Button(frm, text="Back to Login", font=(self.pixel_font, 12, "bold"), bg="#444", fg="white", width=20, height=1,
                               command=self.back_to_login)
         login_btn.pack(pady=(0, 10))
@@ -208,7 +197,7 @@ class ShoeShopApp(tk.Tk):
 
         self.signup_canvas.create_window(panel_width // 2, panel_height // 2, window=frm)
 
-        # Clear placeholder text on click
+
         def clear_signup_email(e):
             if self.signup_email_entry.get() == "EMAIL ADDRESS":
                 self.signup_email_entry.delete(0, tk.END)
@@ -239,16 +228,15 @@ class ShoeShopApp(tk.Tk):
             self.signup_status.config(text="Server error: " + str(e), fg="red")
             self.signup_status.after(3000, lambda: self.signup_status.config(text=""))
 
-    # ========== MAIN UI ==========
+
 
     def init_ui(self):
-        # Sidebar for brands 
+        
         self.sidebar = tk.Frame(self, bg="black", width=160)
         self.brand_buttons = []
         self.brand_frame = tk.Frame(self.sidebar, bg="black")
         self.brand_frame.pack(pady=20)
 
-        # Top menu 
         self.topbar = tk.Frame(self, bg="black", height=40)
         self.men_btn = tk.Button(self.topbar, text="Men", bg="white", fg="black", width=12,
                   command=lambda: self.switch_gender("Men"))
@@ -263,10 +251,10 @@ class ShoeShopApp(tk.Tk):
         tk.Button(self.topbar, text="Cart", bg="black", fg="white", width=10,
                   command=lambda: self.show_section("cart")).pack(side=tk.RIGHT, padx=6)
 
-        # Main area with sections (shop, cart, orders)
+        
         self.main_frame = tk.Frame(self, bg="white")
 
-        # Shop Section 
+
         self.shop_canvas = tk.Canvas(self.main_frame, bg="white", highlightthickness=0)
         self.shop_scrollbar = tk.Scrollbar(self.main_frame, orient="vertical", command=self.shop_canvas.yview)
         self.shop_canvas.configure(yscrollcommand=self.shop_scrollbar.set)
@@ -275,7 +263,7 @@ class ShoeShopApp(tk.Tk):
         self.shop_frame.bind("<Configure>", lambda event: self.shop_canvas.configure(scrollregion=self.shop_canvas.bbox("all")))
         self.shop_canvas.bind("<Configure>", lambda event: self.shop_canvas.itemconfig(self.shop_frame_id, width=event.width))
 
-        # Cart Section
+
         self.cart_section = tk.Frame(self.main_frame, bg="white")
         self.cart_title = tk.Label(self.cart_section, text="Your Cart", font=(self.pixel_font, 14, "bold"), bg="white")
         self.cart_title.pack(pady=(22, 2))
@@ -286,7 +274,7 @@ class ShoeShopApp(tk.Tk):
         self.place_order_btn.pack(pady=16)
         self.empty_cart_label = tk.Label(self.cart_section, text="Your cart is empty.", font=(self.pixel_font, 11), bg="white")
 
-        # Orders Section
+
         self.orders_canvas = tk.Canvas(self.main_frame, bg="white", highlightthickness=0)
         self.orders_scrollbar = tk.Scrollbar(self.main_frame, orient="vertical", command=self.orders_canvas.yview)
         self.orders_canvas.configure(yscrollcommand=self.orders_scrollbar.set)
@@ -359,7 +347,7 @@ class ShoeShopApp(tk.Tk):
         for idx, prod in enumerate(products):
             frame = tk.Frame(self.shop_frame, bd=2, relief=tk.GROOVE, bg="white")
             frame.grid(row=idx // 3, column=idx % 3, padx=16, pady=12, sticky="nsew")
-            # Product image
+
             try:
                 imgdata = requests.get("http://127.0.0.1:5000" + prod["img"]).content
                 image = Image.open(BytesIO(imgdata)).resize((110, 65))
@@ -371,7 +359,7 @@ class ShoeShopApp(tk.Tk):
             img_label.pack(pady=8)
             tk.Label(frame, text=prod["name"], bg="white", font=(self.pixel_font, 11, "bold")).pack()
             tk.Label(frame, text=f"RM {prod['price']:.2f}", bg="white").pack()
-            # Buttons
+           
             bframe = tk.Frame(frame, bg="white")
             bframe.pack(pady=6)
             tk.Button(bframe, text="Add to Cart", bg="black", fg="white", width=11,
