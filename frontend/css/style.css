@@ -1,0 +1,263 @@
+html, body {
+    min-height: 100vh;
+    min-width: 100vw;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+body {
+    color: #111;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    font-smooth: never;
+    -webkit-font-smoothing: none;
+}
+
+header {
+    background: #000;
+    color: #fff;
+    padding: 0;
+    height: 48px;
+    width: 100vw;
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 0 30px;
+    height: 48px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+nav .logo {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-right: 60px;
+    letter-spacing: 2px;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    color: #33ffff;
+    text-shadow: 2px 2px 0 #000, 0 0 8px #f0f, 0 0 10px #fff;
+}
+
+nav button {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    letter-spacing: 1px;
+}
+
+nav button:hover, nav button.active {
+    background: #222;
+}
+
+.container {
+    display: flex;
+    min-height: calc(100vh - 48px);
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.brand-sidebar {
+    background: #000;
+    min-width: 160px;
+    padding-top: 20px;
+    height: calc(100vh - 48px);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    box-sizing: border-box;
+    position: sticky;
+    top: 48px;
+}
+
+#brands-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 10px;
+}
+
+.brand-btn {
+    background: #000;
+    color: #fff;
+    border: none;
+    text-align: left;
+    padding: 14px 28px;
+    font-size: 1.1em;
+    cursor: pointer;
+    outline: none;
+    border-radius: 0;
+    margin: 0 0 6px 0;
+    transition: background 0.18s;
+    width: 100%;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    letter-spacing: 1px;
+}
+
+.brand-btn.active, .brand-btn:hover {
+    background: #fff;
+    color: #000;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px 60px 30px 60px;
+    min-width: 0;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.shop-section {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 16px #eaeaea;
+    padding: 22px 18px 32px 18px;
+    margin-bottom: 32px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 35px;
+    margin-top: 18px;
+}
+
+.product-card {
+    background: #fff;
+    border: 1.5px solid #222;
+    border-radius: 8px;
+    padding: 20px 16px 18px 16px;
+    text-align: center;
+    box-shadow: 0 3px 16px #f1f1f1;
+    min-height: 300px;
+    transition: box-shadow 0.2s, border 0.2s;
+}
+
+.product-card:hover {
+    border: 2px solid #00bbff;
+    box-shadow: 0 5px 24px #e0f7ff;
+}
+
+.product-card img {
+    width: 170px;
+    height: 110px;
+    object-fit: contain;
+    margin-bottom: 14px;
+    background: #eee;
+    border-radius: 5px;
+}
+
+.product-card h3 {
+    font-size: 1.13em;
+    margin: 12px 0 4px 0;
+    font-weight: bold;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    color: #0078ff;
+    text-shadow: 1.5px 1.5px 0 #000;
+    letter-spacing: 1px;
+}
+
+.product-card p {
+    margin: 3px 0 16px 0;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    font-size: 0.93em;
+}
+
+.product-card .btn-row {
+    display: flex;
+    gap: 7px;
+    justify-content: center;
+}
+
+.product-card button {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 2px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.18s;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    letter-spacing: 1px;
+}
+
+.product-card button:hover {
+    background: #111;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 15px 0;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    font-size: 0.95em;
+}
+
+.cart-item input[type=number] {
+    width: 45px;
+    padding: 4px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    font-size: 1em;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+}
+
+.cart-item button {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.2s;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    letter-spacing: 1px;
+}
+
+.cart-item button:hover {
+    background: #333;
+}
+
+.order {
+    background: #fafafa;
+    border: 1px solid #eee;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    border-radius: 7px;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    font-size: 1em;
+}
+
+.order h3 {
+    margin: 0 0 8px 0;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    color: #3cf;
+    text-shadow: 1.5px 1.5px 0 #000, 0 0 8px #f0f;
+    letter-spacing: 1px;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 900px) {
+    .container { flex-direction: column; }
+    .brand-sidebar { flex-direction: row; height: auto; min-width: 0; }
+    .main-content { padding: 12px 2vw; }
+    .product-grid { grid-template-columns: 1fr; }
+}

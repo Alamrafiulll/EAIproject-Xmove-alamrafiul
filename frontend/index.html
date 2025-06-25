@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XMove Shoe Shop</title>
+    <meta name="viewport" content="width=1100, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+      /* Optionally, hide scrollbars for modal fullscreen */
+      body.auth-open { overflow: hidden; }
+    </style>
+</head>
+<body>
+<!-- Background Image for Auth (hide after login) -->
+<img id="bg-img" src="http://127.0.0.1:5000/static/background.jpg" alt="Background"
+     style="display:block;position:fixed;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:0;">
+
+<!-- ========== LOGIN/SIGNUP MODAL ========== -->
+<div id="auth-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;align-items:center;justify-content:center;z-index:30;background:rgba(0,0,0,0.35);">
+  <div style="background:rgba(222,222,222,0.78);padding:38px 36px 30px 36px;border-radius:20px;min-width:350px;box-shadow:0 3px 16px #111;position:relative;z-index:40;backdrop-filter: blur(2px);">
+    <h2 id="auth-title" style="text-align:center;font-family:'Press Start 2P',Arial,sans-serif;">Login</h2>
+    <input id="auth-email" placeholder="Email address" autocomplete="username"
+           style="display:block;width:100%;margin:16px 0 8px 0;padding:12px 10px;font-size:16px;font-family:'Press Start 2P',Arial,sans-serif;">
+    <input id="auth-password" type="password" placeholder="Password" autocomplete="current-password"
+           style="display:block;width:100%;margin-bottom:20px;padding:12px 10px;font-size:16px;font-family:'Press Start 2P',Arial,sans-serif;">
+    <div id="auth-error" style="height:18px;color:#c00;font-size:13px;margin-bottom:10px;text-align:center"></div>
+    <button id="auth-action" style="width:100%;padding:13px 0;background:#111;color:#fff;font-size:1em;font-family:'Press Start 2P',Arial,sans-serif;border:none;border-radius:8px;margin-bottom:10px;cursor:pointer;">Login</button>
+    <div style="text-align:center;margin-top:10px;">
+      <a href="#" id="switch-auth" style="font-size:0.9em;color:#0078ff;text-decoration:underline;cursor:pointer;">Don't have an account? Sign up</a>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MAIN HEADER (hidden until login) ========== -->
+<header id="main-header" style="display:none;">
+    <nav>
+        <span class="logo">XMove</span>
+        <button onclick="showSection('men')">Men</button>
+        <button onclick="showSection('women')">Women</button>
+        <button onclick="showSection('cart')">Cart</button>
+        <button onclick="showSection('orders')">Orders</button>
+        <button onclick="logout()" style="margin-left:auto;background:#d00;">Logout</button>
+    </nav>
+</header>
+
+<!-- ========== MAIN APP UI ========== -->
+<div id="main-ui" style="display:none;">
+  <div class="container">
+      <aside class="brand-sidebar">
+          <div id="brands-list"></div>
+      </aside>
+      <main class="main-content">
+          <section id="men-section" class="shop-section">
+              <h2>Men's Shoes</h2>
+              <div class="product-grid" id="men-products"></div>
+          </section>
+          <section id="women-section" class="shop-section" style="display:none">
+              <h2>Women's Shoes</h2>
+              <div class="product-grid" id="women-products"></div>
+          </section>
+          <section id="cart-section" class="shop-section" style="display:none">
+              <h2>Your Cart</h2>
+              <div id="cart-list"></div>
+              <button id="order-btn" style="margin-top:22px">Place Order</button>
+          </section>
+          <section id="orders-section" class="shop-section" style="display:none">
+              <h2>Your Orders</h2>
+              <div id="orders-list"></div>
+          </section>
+      </main>
+  </div>
+</div>
+
+<!-- ========== SCRIPTS ========== -->
+<script src="js/shop-single.js"></script>
+</body>
+</html>
