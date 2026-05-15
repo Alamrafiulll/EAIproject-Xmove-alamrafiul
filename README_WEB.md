@@ -1,112 +1,57 @@
+# XMove Shoe Shop Angular Web App
 
-# XMove Shoe Shop Web Application
+XMove is now a deployable Angular web app for Vercel. The desktop app is separate and was not changed.
 
-A responsive, pixel-art-inspired web shoe shop built with **HTML, CSS, JS** and powered by a Flask REST API.
+## Run Locally
 
----
-
-## Features
-
-- Shop by gender and brand
-- Add to cart, order now, view/cancel orders
-- Retro game-style font and UI (uses Press Start 2P)
-- Mobile-friendly
-
----
-
-## Folder Structure
-
-```
-EAI_project/
-├── backend/
-│   ├── app.py           # Flask backend (run this first)
-├── frontend/
-│   ├── index.html
-│   ├── css/
-│   │   └── style.css
-│   ├── js/
-│   │   └── shop-single.js
-│   └── fonts/
-│       └── PressStart2P-Regular.ttf   # (Optional)
-├── README_WEB.md
-└── ...
+```bash
+npm install
+npm start
 ```
 
----
+Open the Angular dev server URL shown in the terminal, usually:
 
-## 1. **Prerequisites**
+```text
+http://localhost:4200/
+```
 
-- Python 3.7+ (for backend)
-- Flask backend running (`python backend/app.py`)
+To choose a port explicitly:
 
----
+```bash
+npm start -- --host=127.0.0.1 --port=4200
+```
 
-## 2. **Run the Web App**
+## Build
 
-1. **Start Flask backend:**
-   ```bash
-   cd backend
-   python app.py
-   ```
-2. **Start local web server:**
-   ```bash
-   cd ../frontend
-   python -m http.server 8000
-   ```
-3. Open your browser and go to:
-   ```
-   http://localhost:8000/
-   ```
+```bash
+npm run build
+```
 
----
+The production build is written to:
 
-## 3. **Retro Pixel Font Setup (Optional, but recommended)**
+```text
+dist/xmove-angular/browser
+```
 
-1. In your `frontend/css/style.css`, these lines add the font:
-    ```css
-    @font-face {
-      font-family: 'PressStart2P';
-      src: url('../fonts/PressStart2P-Regular.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-    body {
-      font-family: 'PressStart2P', Arial, sans-serif;
-    }
-    ```
-2. Make sure `fonts/PressStart2P-Regular.ttf` exists.
-   - If not, download from [Google Fonts](https://fonts.google.com/specimen/Press+Start+2P) → Download Family → Unzip and copy TTF file.
-3. Refresh your browser. All text should look pixelated and retro!
+## Deploy To Vercel
 
----
+Import this repository in Vercel. The included `vercel.json` tells Vercel to run:
 
-## 4. **How to Use**
+```bash
+npm run build
+```
 
-- **Browse:** "Men", "Women" buttons and brand sidebar.
-- **Add to Cart:** Click "Add to Cart".
-- **Order Now:** Click "Order".
-- **Cart:** Edit or remove items.
-- **Orders:** View/cancel orders.
+and publish:
 
----
+```text
+dist/xmove-angular/browser
+```
 
-## 5. **Troubleshooting**
+After deployment, copy the Vercel project URL into your resume and portfolio website.
 
-- **No products?** Make sure backend is running.
-- **No pixel font?** Ensure font path is correct and browser cache is cleared (Ctrl+F5).
-- **API errors?** Make sure API_URL in JS matches your Flask backend.
+## Notes
 
----
-
-## 6. **Credits**
-
-- Font: [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P)
-- UI: HTML/CSS/JS
-
----
-
-## 7. **Contact**
-
-For help, open an issue or email the author.
-some times you need to define folder example :to run backend 
-python backend/app.py 
+- The Angular app is self-contained and does not call the local Flask API.
+- Product images and the pixel font are served from Angular's `public` folder.
+- Login and sign up are disabled; visitors can browse immediately.
+- Cart, checkout details, and orders are stored in the browser with `localStorage`, which is suitable for portfolio/demo deployment.

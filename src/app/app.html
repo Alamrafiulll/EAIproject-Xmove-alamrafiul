@@ -1,0 +1,238 @@
+<header>
+  <nav aria-label="Main navigation">
+    <button class="logo" type="button" (click)="showSection('home')">XMove</button>
+    <button type="button" [class.active]="activeSection() === 'home'" (click)="showSection('home')">Home</button>
+    <button type="button" [class.active]="activeSection() === 'men'" (click)="showSection('men')">Men</button>
+    <button type="button" [class.active]="activeSection() === 'women'" (click)="showSection('women')">Women</button>
+    <button type="button" [class.active]="activeSection() === 'cart'" (click)="showSection('cart')">
+      Cart
+      @if (cart().length > 0) {
+        <span class="count">{{ cart().length }}</span>
+      }
+    </button>
+    <button type="button" [class.active]="activeSection() === 'orders'" (click)="showSection('orders')">Orders</button>
+  </nav>
+</header>
+
+<main>
+  @if (activeSection() === 'home') {
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Retro motion footwear</p>
+        <h1>XMove</h1>
+        <p class="hero-text">
+          A pixel-inspired sneaker store built for fast browsing, clean checkout, and bold street-running style.
+        </p>
+        <div class="hero-actions">
+          <button type="button" class="primary-btn" (click)="startShopping('Men')">Shop Men</button>
+          <button type="button" class="secondary-btn" (click)="startShopping('Women')">Shop Women</button>
+        </div>
+      </div>
+
+      <div class="shoe-stage" aria-label="Featured animated shoe">
+        <div class="scanline"></div>
+        <img class="hero-shoe" [src]="heroProduct.img" [alt]="heroProduct.name" />
+        <div class="shadow"></div>
+        <div class="stat-row">
+          <span>18 styles</span>
+          <span>RM 250+</span>
+          <span>Demo checkout</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro-band">
+      <div>
+        <h2>Built like an online shop</h2>
+        <p>Browse by section, filter collections, add items to cart, then place an order through a simple checkout form.</p>
+      </div>
+      <div>
+        <h2>Original display names</h2>
+        <p>Product names and collections are generic for portfolio use while keeping the visual theme and shoe catalog intact.</p>
+      </div>
+      <div>
+        <h2>Deploy ready</h2>
+        <p>The app runs fully in Angular and is prepared for Vercel without a local backend requirement.</p>
+      </div>
+    </section>
+  } @else {
+    <div class="store-layout">
+      @if (activeSection() === 'men' || activeSection() === 'women') {
+        <aside class="collection-sidebar" aria-label="Collection filters">
+          @for (collection of collections; track collection) {
+            <button
+              type="button"
+              class="collection-btn"
+              [class.active]="selectedCollection() === collection"
+              (click)="setCollection(collection)"
+            >
+              {{ collection }}
+            </button>
+          }
+        </aside>
+      }
+
+      <section class="main-content">
+        @if (activeSection() === 'men' || activeSection() === 'women') {
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Catalog</p>
+              <h1>{{ activeSection() === 'men' ? "Men's Shoes" : "Women's Shoes" }}</h1>
+            </div>
+            <span>{{ selectedCollection() }}</span>
+          </div>
+
+          @if (visibleProducts().length === 0) {
+            <p class="empty-state">No products found.</p>
+          } @else {
+            <div class="product-grid">
+              @for (product of visibleProducts(); track product.id) {
+                <article class="product-card">
+                  <img [src]="product.img" [alt]="product.name" />
+                  <p class="product-collection">{{ product.collection }}</p>
+                  <h2>{{ product.name }}</h2>
+                  <p class="price">RM {{ product.price.toFixed(2) }}</p>
+                  <div class="btn-row">
+                    <button type="button" (click)="addToCart(product)">Add</button>
+                    <button type="button" (click)="orderNow(product)">Order</button>
+                  </div>
+                </article>
+              }
+            </div>
+          }
+        }
+
+        @if (activeSection() === 'cart') {
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Checkout queue</p>
+              <h1>Your Cart</h1>
+            </div>
+            <span>RM {{ cartTotal().toFixed(2) }}</span>
+          </div>
+
+          @if (cart().length === 0) {
+            <p class="empty-state">Your cart is empty.</p>
+          } @else {
+            <div class="cart-list">
+              @for (item of cart(); track item.id) {
+                <div class="cart-item">
+                  <div class="cart-name">
+                    <strong>{{ item.name }}</strong>
+                    <span>RM {{ item.price.toFixed(2) }} each</span>
+                  </div>
+                  <label class="qty-control">
+                    <span>Qty</span>
+                    <input
+                      type="number"
+                      min="1"
+                      [ngModel]="item.qty"
+                      (ngModelChange)="updateQty(item.id, $event)"
+                      [attr.aria-label]="'Quantity for ' + item.name"
+                    />
+                  </label>
+                  <div class="line-total">
+                    <span>Subtotal</span>
+                    <strong>RM {{ (item.price * item.qty).toFixed(2) }}</strong>
+                  </div>
+                  <button type="button" (click)="removeItem(item.id)">Remove</button>
+                </div>
+              }
+            </div>
+
+            <div class="cart-summary">
+              <span>Total</span>
+              <strong>RM {{ cartTotal().toFixed(2) }}</strong>
+              <button class="primary-btn" type="button" (click)="openCheckout()">Checkout</button>
+            </div>
+          }
+        }
+
+        @if (activeSection() === 'orders') {
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Demo records</p>
+              <h1>Your Orders</h1>
+            </div>
+            <span>{{ orders().length }} total</span>
+          </div>
+
+          @if (orders().length === 0) {
+            <p class="empty-state">No orders yet.</p>
+          } @else {
+            <div class="orders-list">
+              @for (order of orders(); track order.orderId) {
+                <article class="order">
+                  <div class="order-head">
+                    <h2>Order #{{ order.orderId }}</h2>
+                    <span>{{ order.placedAt }}</span>
+                  </div>
+
+                  <ul>
+                    @for (item of order.items; track item.id) {
+                      <li>
+                        <span>{{ item.name }}</span>
+                        <span>x{{ item.qty }}</span>
+                        <strong>RM {{ (item.price * item.qty).toFixed(2) }}</strong>
+                      </li>
+                    }
+                  </ul>
+
+                  <div class="order-customer">
+                    <span>{{ order.customer.name }}</span>
+                    <span>{{ order.customer.phone }}</span>
+                    <span>{{ order.customer.address }}</span>
+                  </div>
+
+                  <div class="order-foot">
+                    <strong>RM {{ order.total.toFixed(2) }}</strong>
+                    <button type="button" (click)="cancelOrder(order.orderId)">Cancel Order</button>
+                  </div>
+                </article>
+              }
+            </div>
+          }
+        }
+      </section>
+    </div>
+  }
+</main>
+
+@if (checkoutOpen()) {
+  <section class="checkout-backdrop" aria-labelledby="checkout-title" role="dialog">
+    <form class="checkout-panel" (ngSubmit)="confirmOrder()">
+      <div class="checkout-head">
+        <h2 id="checkout-title">Checkout</h2>
+        <button type="button" aria-label="Close checkout" (click)="closeCheckout()">X</button>
+      </div>
+
+      <label>
+        <span>Full name</span>
+        <input type="text" [ngModel]="customerName()" (ngModelChange)="customerName.set($event)" name="name" />
+      </label>
+      <label>
+        <span>Email</span>
+        <input type="email" [ngModel]="customerEmail()" (ngModelChange)="customerEmail.set($event)" name="email" />
+      </label>
+      <label>
+        <span>Phone</span>
+        <input type="tel" [ngModel]="customerPhone()" (ngModelChange)="customerPhone.set($event)" name="phone" />
+      </label>
+      <label>
+        <span>Delivery address</span>
+        <textarea [ngModel]="customerAddress()" (ngModelChange)="customerAddress.set($event)" name="address"></textarea>
+      </label>
+
+      <p class="checkout-error">{{ checkoutError() }}</p>
+      <div class="checkout-total">
+        <span>Total</span>
+        <strong>RM {{ cartTotal().toFixed(2) }}</strong>
+      </div>
+      <button class="primary-btn full-btn" type="submit">Place Order</button>
+    </form>
+  </section>
+}
+
+@if (toast()) {
+  <div class="toast" role="status">{{ toast() }}</div>
+}
