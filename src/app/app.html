@@ -1,3 +1,48 @@
+@if (!currentUser()) {
+  <main class="auth-shell">
+    <section class="auth-card" aria-labelledby="auth-title">
+      <div class="auth-brand">XMove</div>
+      <p class="eyebrow">Player access</p>
+      <h1 id="auth-title">{{ authMode() === 'login' ? 'Log In' : 'Sign Up' }}</h1>
+      <p class="auth-copy">
+        {{ authMode() === 'login' ? 'Continue your shopping run.' : 'Create a local demo shopper account.' }}
+      </p>
+
+      <div class="auth-tabs" role="tablist" aria-label="Account access">
+        <button type="button" [class.active]="authMode() === 'login'" (click)="setAuthMode('login')">Log In</button>
+        <button type="button" [class.active]="authMode() === 'signup'" (click)="setAuthMode('signup')">Sign Up</button>
+      </div>
+
+      <form class="auth-form" (ngSubmit)="submitAuth()">
+        @if (authMode() === 'signup') {
+          <label>
+            <span>Display name</span>
+            <input type="text" name="authName" autocomplete="name" [ngModel]="authName()" (ngModelChange)="authName.set($event)" />
+          </label>
+        }
+        <label>
+          <span>User ID</span>
+          <input type="text" name="authId" autocomplete="username" [ngModel]="authId()" (ngModelChange)="authId.set($event)" />
+        </label>
+        <label>
+          <span>Password</span>
+          <input type="password" name="authPassword" autocomplete="current-password" [ngModel]="authPassword()" (ngModelChange)="authPassword.set($event)" />
+        </label>
+        <p class="auth-error" role="alert">{{ authError() }}</p>
+        <button class="primary-btn full-btn" type="submit">
+          {{ authMode() === 'login' ? 'Enter XMove' : 'Create Account' }}
+        </button>
+      </form>
+
+      <div class="demo-pass">
+        <strong>Demo shopper</strong>
+        <span>User ID: shopper</span>
+        <span>Password: xmove123</span>
+      </div>
+      <p class="demo-note">Demo accounts are stored only in this browser.</p>
+    </section>
+  </main>
+} @else {
 <header>
   <nav aria-label="Main navigation">
     <button class="logo" type="button" (click)="showSection('home')">XMove</button>
@@ -11,6 +56,8 @@
       }
     </button>
     <button type="button" [class.active]="activeSection() === 'orders'" (click)="showSection('orders')">Orders</button>
+    <span class="nav-user">{{ currentUser()?.name }}</span>
+    <button type="button" class="logout-btn" (click)="logout()">Log Out</button>
   </nav>
 </header>
 
@@ -31,7 +78,15 @@
 
       <div class="shoe-stage" aria-label="Featured animated shoe">
         <div class="scanline"></div>
-        <img class="hero-shoe" [src]="heroProduct.img" [alt]="heroProduct.name" />
+        <div class="hologram-beam"></div>
+        @if (previousHeroProduct(); as previousProduct) {
+          <img class="hero-shoe hero-shoe-outgoing" [src]="previousProduct.img" alt="" />
+        }
+        @for (product of [heroProduct()]; track product.id) {
+          <img class="hero-shoe hero-shoe-incoming" [src]="product.img" [alt]="product.name" />
+          <span class="hologram-label">PROJECTING: {{ product.name }}</span>
+        }
+        <div class="projector-base"><span></span></div>
         <div class="shadow"></div>
         <div class="stat-row">
           <span>18 styles</span>
@@ -197,6 +252,7 @@
     </div>
   }
 </main>
+}
 
 @if (checkoutOpen()) {
   <section class="checkout-backdrop" aria-labelledby="checkout-title" role="dialog">

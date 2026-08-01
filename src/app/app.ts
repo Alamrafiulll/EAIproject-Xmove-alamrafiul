@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, OnDestroy, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 type Gender = 'Men' | 'Women';
@@ -35,6 +35,20 @@ interface Order {
   placedAt: string;
   customer: CheckoutDetails;
 }
+
+type AuthMode = 'login' | 'signup';
+
+interface DemoUser {
+  id: string;
+  password: string;
+  name: string;
+}
+
+const DEMO_USER: DemoUser = {
+  id: 'shopper',
+  password: 'xmove123',
+  name: 'Demo Shopper',
+};
 
 const PRODUCTS: Product[] = [
   { id: 1, name: 'Aero Street Runner', gender: 'Men', collection: 'Airflow', price: 450, img: '/static/airmax.jpg' },
@@ -119,10 +133,13 @@ const PRODUCTS: Product[] = [
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
+export class App implements OnDestroy {
   readonly products = PRODUCTS;
   readonly collections = ['All', ...Array.from(new Set(PRODUCTS.map((product) => product.collection))).sort()];
-  readonly heroProduct = PRODUCTS[2];
+  readonly heroProduct = signal(PRODUCTS[2]);
+  readonly previousHeroProduct = signal<Product | null>(null);
+  private readonly heroRotation = window.setInterval(() => this.rotateHeroProduct(), 3200);
+  private heroTransition?: number;
 
   readonly activeSection = signal<Section>('home');
   readonly selectedCollection = signal('All');
@@ -135,6 +152,12 @@ export class App {
   readonly customerAddress = signal('');
   readonly cart = signal<CartItem[]>(this.load<CartItem[]>('xmove-cart', []));
   readonly orders = signal<Order[]>(this.normalizeOrders(this.load<Order[]>('xmove-orders', [])));
+  readonly currentUser = signal<DemoUser | null>(this.load<DemoUser | null>('xmove-session', null));
+  readonly authMode = signal<AuthMode>('login');
+  readonly authId = signal(DEMO_USER.id);
+  readonly authPassword = signal(DEMO_USER.password);
+  readonly authName = signal('');
+  readonly authError = signal('');
 
   readonly visibleProducts = computed(() => {
     const gender: Gender = this.activeSection() === 'women' ? 'Women' : 'Men';
@@ -146,6 +169,72 @@ export class App {
   });
 
   readonly cartTotal = computed(() => this.cart().reduce((total, item) => total + item.price * item.qty, 0));
+
+  ngOnDestroy(): void {
+    window.clearInterval(this.heroRotation);
+    if (this.heroTransition !== undefined) {
+      window.clearTimeout(this.heroTransition);
+    }
+  }
+
+  setAuthMode(mode: AuthMode): void {
+    this.authMode.set(mode);
+    this.authError.set('');
+    this.authName.set('');
+    this.authId.set(mode === 'login' ? DEMO_USER.id : '');
+    this.authPassword.set(mode === 'login' ? DEMO_USER.password : '');
+  }
+
+  submitAuth(): void {
+    const id = this.authId().trim().toLowerCase();
+    const password = this.authPassword();
+
+    if (!id || !password) {
+      this.authError.set('Enter your user ID and password.');
+      return;
+    }
+
+    if (this.authMode() === 'signup') {
+      const name = this.authName().trim();
+      if (!name) {
+        this.authError.set('Enter your display name.');
+        return;
+      }
+      if (password.length < 6) {
+        this.authError.set('Password must be at least 6 characters.');
+        return;
+      }
+
+      const users = this.load<DemoUser[]>('xmove-demo-users', []);
+      if (id === DEMO_USER.id || users.some((user) => user.id === id)) {
+        this.authError.set('That user ID is already registered.');
+        return;
+      }
+
+      const user = { id, password, name };
+      this.save('xmove-demo-users', [...users, user]);
+      this.startSession(user, 'Account created. Welcome to XMove!');
+      return;
+    }
+
+    const users = [DEMO_USER, ...this.load<DemoUser[]>('xmove-demo-users', [])];
+    const user = users.find((candidate) => candidate.id === id && candidate.password === password);
+    if (!user) {
+      this.authError.set('Incorrect user ID or password.');
+      return;
+    }
+
+    this.startSession(user, `Welcome back, ${user.name}!`);
+  }
+
+  logout(): void {
+    localStorage.removeItem('xmove-session');
+    this.currentUser.set(null);
+    this.activeSection.set('home');
+    this.authId.set(DEMO_USER.id);
+    this.authPassword.set(DEMO_USER.password);
+    this.authError.set('');
+  }
 
   showSection(section: Section): void {
     this.activeSection.set(section);
@@ -250,6 +339,29 @@ export class App {
     this.cart.set(cart);
     this.save('xmove-cart', cart);
   }
+
+  private rotateHeroProduct(): void {
+    const currentProduct = this.heroProduct();
+    const currentId = currentProduct.id;
+    const alternatives = this.products.filter((product) => product.id !== currentId);
+    const nextProduct = alternatives[Math.floor(Math.random() * alternatives.length)];
+    this.previousHeroProduct.set(currentProduct);
+    this.heroProduct.set(nextProduct);
+    if (this.heroTransition !== undefined) {
+      window.clearTimeout(this.heroTransition);
+    }
+    this.heroTransition = window.setTimeout(() => this.previousHeroProduct.set(null), 1100);
+  }
+
+  private startSession(user: DemoUser, message: string): void {
+    this.currentUser.set(user);
+    this.save('xmove-session', user);
+    this.authPassword.set('');
+    this.authError.set('');
+    this.activeSection.set('home');
+    this.flash(message);
+  }
+
 
   private flash(message: string): void {
     this.toast.set(message);

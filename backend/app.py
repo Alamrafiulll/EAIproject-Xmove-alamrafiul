@@ -6,47 +6,43 @@ from flask_cors import CORS
 app = Flask(__name__, static_folder='static')
 CORS(app)
 USERS_FILE = os.path.join(os.path.dirname(__file__), "users.csv")
+
 def read_users():
     users = []
     if os.path.exists(USERS_FILE):
         with open(USERS_FILE, 'r', newline='', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            users = list(reader)
+            users = list(csv.DictReader(f))
     return users
 
 def write_user(email, password):
     exists = os.path.exists(USERS_FILE)
     with open(USERS_FILE, 'a', newline='', encoding='utf-8') as f:
-        fieldnames = ['email', 'password']
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=['email', 'password'])
         if not exists:
             writer.writeheader()
         writer.writerow({'email': email, 'password': password})
 
 @app.route('/api/signup', methods=['POST'])
 def signup():
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
+    data = request.get_json(silent=True) or {}
+    email = str(data.get('email') or '').strip().lower()
+    password = str(data.get('password') or '')
     if not email or not password:
         return jsonify({"error": "Email and password required"}), 400
-    users = read_users()
-    if any(u['email'] == email for u in users):
+    if any(user['email'].lower() == email for user in read_users()):
         return jsonify({"error": "Email already registered"}), 400
     write_user(email, password)
     return jsonify({"message": "Sign up successful"})
 
 @app.route('/api/login', methods=['POST'])
 def login():
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
-    users = read_users()
-    user = next((u for u in users if u['email'] == email and u['password'] == password), None)
+    data = request.get_json(silent=True) or {}
+    email = str(data.get('email') or '').strip().lower()
+    password = str(data.get('password') or '')
+    user = next((user for user in read_users() if user['email'].lower() == email and user['password'] == password), None)
     if user:
         return jsonify({"message": "Login successful"})
-    else:
-        return jsonify({"error": "Invalid credentials"}), 401
+    return jsonify({"error": "Invalid credentials"}), 401
 
 products = [
     # Men - Nike

@@ -73,6 +73,109 @@ nav button.active {
   color: var(--yellow);
 }
 
+.nav-user {
+  margin-left: auto;
+  color: var(--yellow);
+  font-size: 0.62rem;
+  line-height: 1.4;
+}
+
+.logout-btn {
+  border-color: var(--pink) !important;
+}
+
+.auth-shell {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 28px 18px;
+}
+
+.auth-card {
+  width: min(470px, 100%);
+  border: 3px solid var(--cyan);
+  border-radius: 8px;
+  padding: clamp(22px, 5vw, 36px);
+  background: rgba(16, 21, 36, 0.97);
+  box-shadow: 8px 8px 0 #000, 0 0 30px rgba(50, 248, 255, 0.25);
+}
+
+.auth-brand {
+  margin-bottom: 28px;
+  color: var(--paper);
+  font-size: clamp(2rem, 10vw, 3.4rem);
+  line-height: 1;
+  text-align: center;
+  text-shadow: 3px 3px 0 var(--cyan), 6px 6px 0 var(--pink);
+}
+
+.auth-card h1 {
+  margin: 8px 0 12px;
+  color: var(--yellow);
+  font-size: 1.35rem;
+}
+
+.auth-copy,
+.demo-note {
+  color: #dbe7ff;
+  font-size: 0.68rem;
+  line-height: 1.8;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 22px 0;
+}
+
+.auth-tabs button {
+  border: 2px solid var(--cyan);
+  border-radius: 4px;
+  padding: 12px 8px;
+  background: transparent;
+  color: #fff;
+  font-size: 0.68rem;
+}
+
+.auth-tabs button.active {
+  background: var(--cyan);
+  color: var(--ink);
+}
+
+.auth-form {
+  display: grid;
+  gap: 15px;
+}
+
+.auth-error {
+  min-height: 18px;
+  margin: 0;
+  color: var(--danger);
+  font-size: 0.65rem;
+}
+
+.demo-pass {
+  display: grid;
+  gap: 9px;
+  margin-top: 22px;
+  border: 2px dashed var(--pink);
+  border-radius: 5px;
+  padding: 14px;
+  color: #dbe7ff;
+  font-size: 0.64rem;
+  line-height: 1.5;
+}
+
+.demo-pass strong {
+  color: var(--yellow);
+}
+
+.demo-note {
+  margin: 13px 0 0;
+  font-size: 0.58rem;
+}
+
 main {
   min-height: calc(100vh - 65px);
   background:
@@ -218,13 +321,81 @@ main {
 }
 
 .hero-shoe {
-  position: relative;
+  position: absolute;
   z-index: 3;
   width: min(82%, 560px);
   max-height: 290px;
   object-fit: contain;
   filter: drop-shadow(12px 18px 0 rgba(0, 0, 0, 0.35));
-  animation: shoeFloat 3.2s ease-in-out infinite;
+  will-change: opacity, transform, filter;
+}
+
+.hero-shoe-incoming {
+  animation:
+    hologramMaterialize 1.05s cubic-bezier(0.22, 1, 0.36, 1) both,
+    shoeFloat 3.2s 1.05s ease-in-out infinite;
+}
+
+.hero-shoe-outgoing {
+  animation: hologramDissolve 1.05s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.hologram-beam {
+  position: absolute;
+  bottom: 72px;
+  z-index: 1;
+  width: 72%;
+  height: 72%;
+  clip-path: polygon(43% 100%, 57% 100%, 100% 0, 0 0);
+  background: linear-gradient(90deg, transparent, rgba(50, 248, 255, 0.13), rgba(255, 53, 232, 0.13), transparent);
+  filter: blur(5px);
+  animation: beamFlicker 2.4s ease-in-out infinite;
+}
+
+.hologram-label {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  left: 18px;
+  z-index: 5;
+  overflow: hidden;
+  border: 2px solid var(--pink);
+  border-radius: 4px;
+  padding: 9px 12px;
+  background: rgba(7, 8, 19, 0.9);
+  color: var(--yellow);
+  font-size: 0.62rem;
+  line-height: 1.5;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-shadow: 0 0 8px var(--pink);
+  white-space: nowrap;
+  box-shadow: 3px 3px 0 #000, 0 0 10px rgba(255, 53, 232, 0.4);
+  animation: labelMaterialize 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.projector-base {
+  position: absolute;
+  bottom: 65px;
+  z-index: 3;
+  width: 120px;
+  height: 18px;
+  border: 3px solid var(--cyan);
+  border-radius: 50%;
+  background: #070813;
+  box-shadow: 0 0 16px var(--cyan), inset 0 0 10px var(--pink);
+}
+
+.projector-base span {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: 58%;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 14px var(--cyan);
+  transform: translateX(-50%);
 }
 
 .shadow {
@@ -704,10 +875,62 @@ label {
   }
 }
 
+@keyframes hologramMaterialize {
+  0% {
+    opacity: 0;
+    filter: brightness(1.8) saturate(1.4) drop-shadow(0 0 22px var(--cyan));
+    transform: translateY(20px) scale(0.94) rotate(-7deg);
+  }
+  55% {
+    opacity: 0.82;
+    filter: brightness(1.3) saturate(1.2) drop-shadow(0 0 14px var(--cyan));
+  }
+  100% {
+    opacity: 1;
+    filter: drop-shadow(12px 18px 0 rgba(0, 0, 0, 0.35)) drop-shadow(0 0 8px rgba(50, 248, 255, 0.65));
+    transform: translateY(0) rotate(-7deg);
+  }
+}
+
+@keyframes hologramDissolve {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(-7deg);
+  }
+  100% {
+    opacity: 0;
+    filter: brightness(1.8) blur(3px) drop-shadow(0 0 20px var(--pink));
+    transform: translateY(-18px) scale(1.03) rotate(-4deg);
+  }
+}
+
+@keyframes beamFlicker {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 0.28;
+  }
+}
+
+@keyframes labelMaterialize {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-shoe,
   .shadow,
-  .shoe-stage::after {
+  .shoe-stage::after,
+  .hologram-beam,
+  .hologram-label {
     animation: none;
   }
 }
@@ -722,6 +945,12 @@ label {
     width: 100%;
     margin-right: 0;
     text-align: left;
+  }
+
+  .nav-user {
+    width: 100%;
+    margin-left: 0;
+    padding: 4px 12px;
   }
 
   .hero {
